@@ -1,6 +1,7 @@
 # https://stackoverflow.com/questions/17784587/gradient-descent-using-python-and-numpy
 # https://atmamani.github.io/projects/ml/gradient-descent-in-python/
 
+from operator import mul
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
@@ -56,13 +57,13 @@ def compute_cost(X, y, theta):
     m = y.shape[0]
 
     # 2. Voorspellingen
-    predictions = np.dot(X, theta)
+    predictions = X.dot(theta)
 
     # 3 & 4. Verschil voorspellingen en werkelijke waarde, vervolgens kwadrateren
     errors = (predictions - y) ** 2
 
     # 5. Tel het aantal op en deel het door het aantal datapunten
-    J = sum(errors)/m
+    J = sum(errors)/(2 * m)
     # print(J)
 
     return J
@@ -91,50 +92,28 @@ def gradient_descent(X, y, theta, alpha, num_iters):
     costs = []
 
     # YOUR CODE HERE
-    theta = theta.reshape(2,1)
+    
+    theta = theta.T
 
     # Iterereer 1500 keer
     for i in range (num_iters):
-        # print(X[i])
-        # break
         # 1. Bepaal de voorspelling
-        predictions = np.dot(X, theta.T)
+        predictions = np.dot(X, theta)
 
         # 2. Verschil met de daadwerkelijke waarde
         diff = (predictions - y)
 
         # 3. vermenigvuldig dit met X
-        # multipliedDiff = np.dot(X.T, diff) / m
+        multipliedDiff = X * diff
 
-        for index, t in enumerate(theta):
-            mutipliedDiff = sum(diff * X[:,index].reshape(m,1))
-        
-
-        # 4. Update per theta (loop er door heen)
-            min_theta = np.array([alpha * mutiplied0], [alpha * mutipliedDiff])
-
-            t = theta - min_theta.reshape(2,1)
-        # print(theta)
-        theta = theta - (1/m) * alpha * X.T.dot(predictions - y)
-
-#         error = (np.dot(X, theta) - y)
-        
-#         term0 = (alpha/m) * sum(error* X[:,0].reshape(m,1))
-#         term1 = (alpha/m) * sum(error* X[:,1].reshape(m,1))
-        
-#         # update theta
-#         term_vector = np.array([[term0],[term1]])
-# #         print(term_vector)
-#         theta = theta - term_vector.reshape(2,1)
-
-
+        for index, _ in enumerate(theta):
+            totalSum = sum([value[index] for value in multipliedDiff])
+            theta[index] = theta[index] - alpha * (totalSum / m)
 
     # aan het eind van deze loop retourneren we de nieuwe waarde van theta
     # (wat is de dimensionaliteit van theta op dit moment?).
 
-    # return theta, costs
-    return theta
-
+    return theta, costs
 
 def draw_costs(data): 
     # OPGAVE 3b

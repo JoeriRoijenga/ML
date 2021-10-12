@@ -29,23 +29,23 @@ m,n = data.shape
 m,n = data.shape
 X = np.c_[np.ones(m), data[:, [0]]]
 y = data[:, [1]]
-# theta = np.zeros( (2, 1) )
-theta = np.array([ [2, 1] ]) # [2.5, 1] resulteert in +- 32.07 
+theta = np.zeros( (2, 1) )
+# theta = np.array([ [2, 1] ]) # [2.5, 1] resulteert in +- 32.07 
 
 # # ========================  OPGAVE 1 ========================
-# print ("\nOpgave 1: draw_graph")
-# print ("Tekenen van de scatter plot van de data...")
-# if (len(sys.argv)>1 and sys.argv[1]=='skip'): print ('Slaan we over!')
-# else: draw_graph(data)
-# input ("Druk op return om verder te gaan...");
+print ("\nOpgave 1: draw_graph")
+print ("Tekenen van de scatter plot van de data...")
+if (len(sys.argv)>1 and sys.argv[1]=='skip'): print ('Slaan we over!')
+else: draw_graph(data)
+input ("Druk op return om verder te gaan...");
 
 # # ========================  OPGAVE 2 ========================
-# print ("\nOpgave 2: compute_cost")
-# J = compute_cost(X, y, theta.T);
-# print (f"De gevonden waarde van J is {J}")
-# print ("Deze waarde zou rond de 32.07 moeten liggen")
+print ("\nOpgave 2: compute_cost")
+J = compute_cost(X, y, theta);
+print (f"De gevonden waarde van J is {J}")
+print ("Deze waarde zou rond de 32.07 moeten liggen")
 
-# input ("Druk op return om verder te gaan...");
+input ("Druk op return om verder te gaan...");
 
 # ========================  OPGAVE 3 ========================
 print ("\nOpgave 3a: gradient_descent")
@@ -53,11 +53,11 @@ alpha = 0.01
 num_iters = 1500
 theta = np.zeros( (1,2) )
 
-theta = gradient_descent(X, y, theta, alpha, num_iters) 
-# theta, costs = gradient_descent(X, y, theta, alpha, num_iters) 
-print (f"De gevonden waarde voor theta={theta[0]}")
+# theta = gradient_descent(X, y, theta, alpha, num_iters) 
+theta, costs = gradient_descent(X, y, theta, alpha, num_iters) 
+print (f"De gevonden waarde voor theta=[{theta[0]}, {theta[1]}]")
 print ("Deze waarde zou rond de [-3.63, 1.16] moeten liggen.")
-print (f"De kost met deze waarde van theta is {compute_cost(X, y, theta.T)}")
+print (f"De kost met deze waarde van theta is {compute_cost(X, y, theta)}")
 print ("Die zou zo rond de 4.48 moeten liggen.")
 input ("Druk op return om verder te gaan...")
 
