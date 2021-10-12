@@ -25,7 +25,7 @@ def draw_graph(data):
 
     #YOUR CODE HERE
     x, y = np.rot90(data)
-
+    
     plt.scatter(y, x)
     plt.show()
 
@@ -110,15 +110,20 @@ def gradient_descent(X, y, theta, alpha, num_iters):
             totalSum = sum([value[index] for value in multipliedDiff])
             theta[index] = theta[index] - alpha * (totalSum / m)
 
+        costs.append([i, compute_cost(X, y, theta)[0]])
     # aan het eind van deze loop retourneren we de nieuwe waarde van theta
     # (wat is de dimensionaliteit van theta op dit moment?).
+    # Dat zou theta = np.zeros( (1,2) ) -> (1,2) moeten zijn 
 
     return theta, costs
 
 def draw_costs(data): 
     # OPGAVE 3b
     # YOUR CODE HERE
-    pass
+    y, x = np.rot90(data)
+
+    plt.plot(x, y)
+    plt.show()
 
 def contour_plot(X, y):
     #OPGAVE 4
@@ -141,6 +146,9 @@ def contour_plot(X, y):
     J_vals = np.zeros( (len(t2), len(t2)) )
 
     #YOUR CODE HERE 
+    for i, val_t1 in enumerate(t1):
+        for j, val_t2 in enumerate(t2):
+            J_vals[i][j] = compute_cost(X, y, [[val_t1], [val_t2]])
 
     surf = ax.plot_surface(T1, T2, J_vals, rstride=1, cstride=1, cmap=cm.coolwarm, linewidth=0, antialiased=False)
 

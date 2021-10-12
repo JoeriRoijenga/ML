@@ -62,10 +62,10 @@ print ("Die zou zo rond de 4.48 moeten liggen.")
 input ("Druk op return om verder te gaan...")
 
 # # ========================  OPGAVE 4 ========================
-# print ("\nOpgave 3b: draw_costs")
+print ("\nOpgave 3b: draw_costs")
 # draw_costs(costs)
-# input ("Druk op return om verder te gaan...")
+input ("Druk op return om verder te gaan...")
 
 # # ========================  OPGAVE 5 ========================
-# print ("\nOpgave 4: contour plot")
-# contour_plot(X, y)
+print ("\nOpgave 4: contour plot")
+contour_plot(X, y)
