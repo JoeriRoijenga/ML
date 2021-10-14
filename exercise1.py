@@ -63,7 +63,7 @@ input ("Druk op return om verder te gaan...")
 
 # # ========================  OPGAVE 4 ========================
 print ("\nOpgave 3b: draw_costs")
-# draw_costs(costs)
+draw_costs(costs)
 input ("Druk op return om verder te gaan...")
 
 # # ========================  OPGAVE 5 ========================
