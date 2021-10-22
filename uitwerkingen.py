@@ -20,7 +20,7 @@ def sigmoid(z):
     # vector is.
     # Maak gebruik van de methode exp() in NumPy.
 
-    pass
+    return (1 / (1 + np.exp(-z)))
 
 
 # ==== OPGAVE 2b ====

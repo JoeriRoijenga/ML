@@ -79,14 +79,19 @@ print ("")
 print ("Sigmoid-functie met een relatief groot negatief getal zou bijna 0 moeten zijn")
 print (f"Sigmoid van -10 = {sigmoid(-10)}")
 
+print ("")
 print ("Sigmoid-functie van 0 zou 0,5 moeten zijn.")
 print (f"Sigmoid van 0 = {sigmoid(0)}")
 
+print ("")
 print ("Sigmoid-functie met een relatief groot positief getal zou bijna 1 moeten zijn")
 print (f"Sigmoid van 10 = {sigmoid(10)}")
 
+print ("")
 print ("Simoid aangeroepen met 1×3 vector [-10, 0, 10]")
 print (sigmoid(np.matrix( [-10, 0, 10] )))
+
+print ("")
 print ("Simoid aangeroepen met 3×1 vector [-10, 0, 10]")
 print (sigmoid(np.matrix( ([-10], [0], [10]) )))
 
