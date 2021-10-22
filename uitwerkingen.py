@@ -10,7 +10,8 @@ def plot_number(nrVector):
     # gespiegeld en geroteerd. Zie de documentatie op 
     # https://docs.scipy.org/doc/numpy/reference/generated/numpy.reshape.html
 
-    pass
+    plt.matshow(np.reshape(nrVector.T, (20, 20), order='F'));
+    plt.show()
 
 # ==== OPGAVE 2a ====
 def sigmoid(z):
