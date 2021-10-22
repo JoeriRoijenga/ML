@@ -1,161 +1,106 @@
-# https://stackoverflow.com/questions/17784587/gradient-descent-using-python-and-numpy
-# https://atmamani.github.io/projects/ml/gradient-descent-in-python/
-
-from operator import mul
 import numpy as np
 import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
-from matplotlib import cm
-import matplotlib.mlab as mlab
+from scipy.sparse import csr_matrix
 
-def draw_graph(data):
-    #OPGAVE 1
-    # Maak een scatter-plot van de data die als parameter aan deze functie wordt meegegeven. Deze data
-    # is een twee-dimensionale matrix met in de eerste kolom de grootte van de steden, in de tweede
-    # kolom de winst van de vervoerder. Zet de eerste kolom op de x-as en de tweede kolom op de y-as.
-    # Je kunt hier gebruik maken van de mogelijkheid die Python biedt om direct een waarde toe te kennen
-    # aan meerdere variabelen, zoals in het onderstaande voorbeeld:
+# ==== OPGAVE 1 ====
+def plot_number(nrVector):
+    # Let op: de manier waarop de data is opgesteld vereist dat je gebruik maakt
+    # van de Fortran index-volgorde – de eerste index verandert het snelst, de 
+    # laatste index het langzaamst; als je dat niet doet, wordt het plaatje 
+    # gespiegeld en geroteerd. Zie de documentatie op 
+    # https://docs.scipy.org/doc/numpy/reference/generated/numpy.reshape.html
 
-    #     l = [ 3, 4 ]
-    #     x,y = l      ->  x = 3, y = 4
+    pass
 
-    # Om deze constructie in dit specifieke geval te kunnen gebruiken, moet de data-matrix wel eerst
-    # roteren (waarom?).
-    # Maak gebruik van pytplot.scatter om dit voor elkaar te krijgen.
+# ==== OPGAVE 2a ====
+def sigmoid(z):
+    # Maak de code die de sigmoid van de input z teruggeeft. Zorg er hierbij
+    # voor dat de code zowel werkt wanneer z een getal is als wanneer z een
+    # vector is.
+    # Maak gebruik van de methode exp() in NumPy.
+
+    pass
+
+
+# ==== OPGAVE 2b ====
+def get_y_matrix(y, m):
+    # Gegeven een vector met waarden y_i van 1...x, retourneer een (ijle) matrix
+    # van m×x met een 1 op positie y_i en een 0 op de overige posities.
+    # Let op: de gegeven vector y is 1-based en de gevraagde matrix is 0-based,
+    # dus als y_i=1, dan moet regel i in de matrix [1,0,0, ... 0] zijn, als
+    # y_i=10, dan is regel i in de matrix [0,0,...1] (in dit geval is de breedte
+    # van de matrix 10 (0-9), maar de methode moet werken voor elke waarde van 
+    # y en m
 
     #YOUR CODE HERE
-    x, y = np.rot90(data)
+    pass
+
+# ==== OPGAVE 2c ==== 
+# ===== deel 1: =====
+def predict_number(Theta1, Theta2, X):
+    # Deze methode moet een matrix teruggeven met de output van het netwerk
+    # gegeven de waarden van Theta1 en Theta2. Elke regel in deze matrix 
+    # is de waarschijnlijkheid dat het sample op die positie (i) het getal
+    # is dat met de kolom correspondeert.
+
+    # De matrices Theta1 en Theta2 corresponderen met het gewicht tussen de
+    # input-laag en de verborgen laag, en tussen de verborgen laag en de
+    # output-laag, respectievelijk. 
+
+    # Een mogelijk stappenplan kan zijn:
+
+    #    1. voeg enen toe aan de gegeven matrix X; dit is de input-matrix a1
+    #    2. roep de sigmoid-functie van hierboven aan met a1 als actuele
+    #       parameter: dit is de variabele a2
+    #    3. voeg enen toe aan de matrix a2, dit is de input voor de laatste
+    #       laag in het netwerk
+    #    4. roep de sigmoid-functie aan op deze a2; dit is het uiteindelijke
+    #       resultaat: de output van het netwerk aan de buitenste laag.
+
+    # Voeg enen toe aan het begin van elke stap en reshape de uiteindelijke
+    # vector zodat deze dezelfde dimensionaliteit heeft als y in de exercise.
+
+    pass
+
+
+
+# ===== deel 2: =====
+def compute_cost(Theta1, Theta2, X, y):
+    # Deze methode maakt gebruik van de methode predictNumber() die je hierboven hebt
+    # geïmplementeerd. Hier wordt het voorspelde getal vergeleken met de werkelijk 
+    # waarde (die in de parameter y is meegegeven) en wordt de totale kost van deze
+    # voorspelling (dus met de huidige waarden van Theta1 en Theta2) berekend en
+    # geretourneerd.
+    # Let op: de y die hier binnenkomt is de m×1-vector met waarden van 1...10. 
+    # Maak gebruik van de methode get_y_matrix() die je in opgave 2a hebt gemaakt
+    # om deze om te zetten naar een matrix. 
+
+    pass
+
+
+
+# ==== OPGAVE 3a ====
+def sigmoid_gradient(z): 
+    # Retourneer hier de waarde van de afgeleide van de sigmoïdefunctie.
+    # Zie de opgave voor de exacte formule. Zorg ervoor dat deze werkt met
+    # scalaire waarden en met vectoren.
+
+    pass
+
+# ==== OPGAVE 3b ====
+def nn_check_gradients(Theta1, Theta2, X, y): 
+    # Retourneer de gradiënten van Theta1 en Theta2, gegeven de waarden van X en van y
+    # Zie het stappenplan in de opgaven voor een mogelijke uitwerking.
+
+    Delta2 = np.zeros(Theta1.shape)
+    Delta3 = np.zeros(Theta2.shape)
+    m = 1 #voorbeeldwaarde; dit moet je natuurlijk aanpassen naar de echte waarde van m
+
+    for i in range(m): 
+        #YOUR CODE HERE
+        pass
+
+    Delta2_grad = Delta2 / m
+    Delta3_grad = Delta3 / m
     
-    plt.scatter(y, x)
-    plt.show()
-
-def compute_cost(X, y, theta):
-    #OPGAVE 2
-    # Deze methode berekent de kosten van de huidige waarden van theta, dat wil zeggen de mate waarin de
-    # voorspelling (gegeven de specifieke waarde van theta) correspondeert met de werkelijke waarde (die
-    # is gegeven in y).
-
-    # Elk datapunt in X wordt hierin vermenigvuldigd met theta (welke dimensies hebben X en dus theta?)
-    # en het resultaat daarvan wordt vergeleken met de werkelijke waarde (dus met y). Het verschil tussen
-    # deze twee waarden wordt gekwadrateerd en het totaal van al deze kwadraten wordt gedeeld door het
-    # aantal data-punten om het gemiddelde te krijgen. Dit gemiddelde moet je retourneren (de variabele
-    # J: een getal, kortom).
-
-    # Een stappenplan zou het volgende kunnen zijn:
-
-    #    1. bepaal het aantal datapunten
-    #    2. bepaal de voorspelling (dus elk punt van X maal de huidige waarden van theta)
-    #    3. bereken het verschil tussen deze voorspelling en de werkelijke waarde
-    #    4. kwadrateer dit verschil
-    #    5. tel al deze kwadraten bij elkaar op en deel dit door twee keer het aantal datapunten
-
-    J = 0
-
-    # YOUR CODE HERE
-
-    # 1. Aantal datapunten
-    m = y.shape[0]
-
-    # 2. Voorspellingen
-    predictions = X.dot(theta)
-
-    # 3 & 4. Verschil voorspellingen en werkelijke waarde, vervolgens kwadrateren
-    errors = (predictions - y) ** 2
-
-    # 5. Tel het aantal op en deel het door het aantal datapunten
-    J = sum(errors)/(2 * m)
-    # print(J)
-
-    return J
-
-
-
-def gradient_descent(X, y, theta, alpha, num_iters):
-    #OPGAVE 3a
-    # In deze opgave wordt elke parameter van theta num_iter keer geüpdate om de optimale waarden
-    # voor deze parameters te vinden. Per iteratie moet je alle parameters van theta update.
-
-    # Elke parameter van theta wordt verminderd met de som van de fout van alle datapunten
-    # vermenigvuldigd met het datapunt zelf (zie Blackboard voor de formule die hierbij hoort).
-    # Deze som zelf wordt nog vermenigvuldigd met de 'learning rate' alpha.
-
-    # Een mogelijk stappenplan zou zijn:
-    #
-    # Voor elke iteratie van 1 tot num_iters:
-    #   1. bepaal de voorspelling voor het datapunt, gegeven de huidige waarde van theta
-    #   2. bepaal het verschil tussen deze voorspelling en de werkelijke waarde
-    #   3. vermenigvuldig dit verschil met de i-de waarde van X
-    #   4. update de i-de parameter van theta, namelijk door deze te verminderen met
-    #      alpha keer het gemiddelde van de som van de vermenigvuldiging uit 3
-
-    m,n = X.shape
-    costs = []
-
-    # YOUR CODE HERE
-    
-    theta = theta.T
-
-    # Iterereer 1500 keer
-    for i in range (num_iters):
-        # 1. Bepaal de voorspelling
-        predictions = np.dot(X, theta)
-
-        # 2. Verschil met de daadwerkelijke waarde
-        diff = (predictions - y)
-
-        # 3. vermenigvuldig dit met X
-        multipliedDiff = X * diff
-
-        for index, _ in enumerate(theta):
-            totalSum = sum([value[index] for value in multipliedDiff])
-            theta[index] = theta[index] - alpha * (totalSum / m)
-
-        costs.append([i, compute_cost(X, y, theta)[0]])
-    # aan het eind van deze loop retourneren we de nieuwe waarde van theta
-    # (wat is de dimensionaliteit van theta op dit moment?).
-    # Dat zou theta = np.zeros( (1,2) ) -> (1,2) moeten zijn 
-
-    return theta, costs
-
-def draw_costs(data): 
-    # OPGAVE 3b
-    # YOUR CODE HERE
-    y, x = np.rot90(data)
-
-    plt.plot(x, y)
-    plt.show()
-
-def contour_plot(X, y):
-    #OPGAVE 4
-    # Deze methode tekent een contour plot voor verschillende waarden van theta_0 en theta_1.
-    # De infrastructuur en algemene opzet is al gegeven; het enige wat je hoeft te doen is 
-    # de matrix J_vals vullen met waarden die je berekent aan de hand van de methode computeCost,
-    # die je hierboven hebt gemaakt.
-    # Je moet hiervoor door de waarden van t1 en t2 itereren, en deze waarden in een ndarray
-    # zetten. Deze ndarray kun je vervolgens meesturen aan de functie computeCost. Bedenk of je nog een
-    # transformatie moet toepassen of niet. Let op: je moet computeCost zelf *niet* aanpassen.
-
-    fig = plt.figure()
-    ax = fig.gca(projection = '3d')
-    jet = plt.get_cmap('jet')
-
-    t1 = np.linspace(-10, 10, 100)
-    t2 = np.linspace(-1, 4, 100)
-    T1, T2 = np.meshgrid(t1, t2)
-
-    J_vals = np.zeros( (len(t2), len(t2)) )
-
-    #YOUR CODE HERE 
-    for i, val_t1 in enumerate(t1):
-        for j, val_t2 in enumerate(t2):
-            J_vals[i][j] = compute_cost(X, y, [[val_t1], [val_t2]])
-
-    surf = ax.plot_surface(T1, T2, J_vals, rstride=1, cstride=1, cmap=cm.coolwarm, linewidth=0, antialiased=False)
-
-    xLabel = ax.set_xlabel(r'$\theta_0$', linespacing=3.2)
-    yLabel = ax.set_ylabel(r'$\theta_1$', linespacing=3.1)
-    zLabel = ax.set_zlabel(r'$J(\theta_0, \theta_1)$', linespacing=3.4)
-
-    ax.dist = 10
-
-    plt.show()
+    return Delta2_grad, Delta3_grad
