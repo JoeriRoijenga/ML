@@ -33,8 +33,15 @@ def get_y_matrix(y, m):
     # van de matrix 10 (0-9), maar de methode moet werken voor elke waarde van 
     # y en m
 
-    #YOUR CODE HERE
-    pass
+    cols = np.array(y.reshape(-1))
+
+    np.where(cols==10, 0, cols) 
+
+    rows = [i for i in range(m)]
+    data = [1 for _ in range(m)]
+    width = max(cols) + 1
+    y_vec = csr_matrix((data, (rows, cols)), shape=(m, width)).todense()
+    return y_vec[:,1:]
 
 # ==== OPGAVE 2c ==== 
 # ===== deel 1: =====
@@ -61,9 +68,22 @@ def predict_number(Theta1, Theta2, X):
     # Voeg enen toe aan het begin van elke stap en reshape de uiteindelijke
     # vector zodat deze dezelfde dimensionaliteit heeft als y in de exercise.
 
-    pass
+    m = X.shape[0]
 
+    # 1. voeg enen toe aan de gegeven matrix X; dit is de input-matrix a1
+    ones = np.ones((m, 1))
+    A1 = np.hstack((ones, X))
 
+    # 2. roep de sigmoid-functie van hierboven aan met a1 als actuele parameter: dit is de variabele a2
+    A2 = sigmoid(A1.dot(Theta1.T))
+
+    # 3. voeg enen toe aan de matrix a2, dit is de input voor de laatste laag in het netwerk
+    A2 = np.hstack((ones, A2))
+
+    # 4. roep de sigmoid-functie aan op deze a2; dit is het uiteindelijke resultaat: de output van het netwerk aan de buitenste laag.
+    output = sigmoid(A2.dot(Theta2.T))
+    
+    return output
 
 # ===== deel 2: =====
 def compute_cost(Theta1, Theta2, X, y):
@@ -75,9 +95,17 @@ def compute_cost(Theta1, Theta2, X, y):
     # Let op: de y die hier binnenkomt is de m×1-vector met waarden van 1...10. 
     # Maak gebruik van de methode get_y_matrix() die je in opgave 2a hebt gemaakt
     # om deze om te zetten naar een matrix. 
+    
+    m = X.shape[0]
+    
+    y_vec = get_y_matrix(y, m)
+    A3 = predict_number(Theta1, Theta2, X)
 
-    pass
+    summedTotal = np.sum(np.dot(y_vec.T, np.log(A3)) + np.dot((1 - y_vec.T), np.log(1 - A3)))
 
+    J = (-1 / summedTotal) * summedTotal
+
+    return J
 
 
 # ==== OPGAVE 3a ====
