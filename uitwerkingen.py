@@ -101,11 +101,9 @@ def compute_cost(Theta1, Theta2, X, y):
     y_vec = get_y_matrix(y, m)
     A3 = predict_number(Theta1, Theta2, X)
 
-    summedTotal = np.sum(np.dot(y_vec.T, np.log(A3)) + np.dot((1 - y_vec.T), np.log(1 - A3)))
+    cost = (1 / m) * sum(np.dot(-y_vec.T, np.log(A3)) - np.dot((1 - y_vec.T), np.log(1 - A3)))
 
-    J = (-1 / summedTotal) * summedTotal
-
-    return J
+    return np.average(cost)
 
 
 # ==== OPGAVE 3a ====
