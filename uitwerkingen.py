@@ -112,7 +112,8 @@ def sigmoid_gradient(z):
     # Zie de opgave voor de exacte formule. Zorg ervoor dat deze werkt met
     # scalaire waarden en met vectoren.
 
-    pass
+    g = sigmoid(z)
+    return g * (1 - g)
 
 # ==== OPGAVE 3b ====
 def nn_check_gradients(Theta1, Theta2, X, y): 
@@ -123,8 +124,9 @@ def nn_check_gradients(Theta1, Theta2, X, y):
     Delta3 = np.zeros(Theta2.shape)
     m = 1 #voorbeeldwaarde; dit moet je natuurlijk aanpassen naar de echte waarde van m
 
-    for i in range(m): 
+    for i in range(m):
         #YOUR CODE HERE
+        
         pass
 
     Delta2_grad = Delta2 / m
