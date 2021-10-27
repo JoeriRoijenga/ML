@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from numpy.core.fromnumeric import transpose
 from scipy.sparse import csr_matrix
 
 # ==== OPGAVE 1 ====
@@ -34,14 +35,14 @@ def get_y_matrix(y, m):
     # y en m
 
     cols = np.array(y.reshape(-1))
-
-    np.where(cols==10, 0, cols) 
+    cols = np.where(cols==10, 0, cols)
 
     rows = [i for i in range(m)]
     data = [1 for _ in range(m)]
     width = max(cols) + 1
     y_vec = csr_matrix((data, (rows, cols)), shape=(m, width)).todense()
-    return y_vec[:,1:]
+    
+    return y_vec
 
 # ==== OPGAVE 2c ==== 
 # ===== deel 1: =====
@@ -119,15 +120,46 @@ def sigmoid_gradient(z):
 def nn_check_gradients(Theta1, Theta2, X, y): 
     # Retourneer de gradiënten van Theta1 en Theta2, gegeven de waarden van X en van y
     # Zie het stappenplan in de opgaven voor een mogelijke uitwerking.
+    
+    Theta1 = Theta1[:,1:]
+    Theta2 = Theta2[:,1:]
 
     Delta2 = np.zeros(Theta1.shape)
     Delta3 = np.zeros(Theta2.shape)
-    m = 1 #voorbeeldwaarde; dit moet je natuurlijk aanpassen naar de echte waarde van m
+    # m = 1 #voorbeeldwaarde; dit moet je natuurlijk aanpassen naar de echte waarde van m
+    m = y.shape[0]
+
+    y_vec = get_y_matrix(y, m)
 
     for i in range(m):
-        #YOUR CODE HERE
+        A1 = X[i]
         
-        pass
+        # Enen nog toevoegen bij forward
+        Z2 = A1.dot(Theta1.T)
+        A2 = sigmoid(Z2)
+
+        # Enen nog toevoegen bij forward
+        Z3 = A2.dot(Theta2.T)
+        A3 = sigmoid(Z3) # output
+        
+        z2_prime = sigmoid_gradient(Z2) # grad_2
+        z2_prime = z2_prime.reshape(z2_prime.shape[0], 1)
+
+        d3 = (A3 - y_vec[i]).T
+        
+        theta_d3 = np.dot(Theta2.T, d3)
+        theta_d3 = np.squeeze(np.asarray(theta_d3))
+        z2_prime = np.squeeze(np.asarray(z2_prime))
+        d2 = theta_d3 * z2_prime
+        
+        d2 = d2.reshape(d2.shape[0], 1)
+        A1 = A1.reshape(A1.shape[0], 1)
+        A2 = A2.reshape(A2.shape[0], 1)
+        
+        Delta2 += np.dot(d2, A1.T)
+        Delta3 += np.dot(d3, A2.T)
+
+
 
     Delta2_grad = Delta2 / m
     Delta3_grad = Delta3 / m
