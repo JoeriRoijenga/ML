@@ -120,9 +120,6 @@ def sigmoid_gradient(z):
 def nn_check_gradients(Theta1, Theta2, X, y): 
     # Retourneer de gradiënten van Theta1 en Theta2, gegeven de waarden van X en van y
     # Zie het stappenplan in de opgaven voor een mogelijke uitwerking.
-    
-    Theta1 = Theta1[:,1:]
-    Theta2 = Theta2[:,1:]
 
     Delta2 = np.zeros(Theta1.shape)
     Delta3 = np.zeros(Theta2.shape)
@@ -132,33 +129,42 @@ def nn_check_gradients(Theta1, Theta2, X, y):
     y_vec = get_y_matrix(y, m)
 
     for i in range(m):
-        A1 = X[i]
-        
-        # Enen nog toevoegen bij forward
-        Z2 = A1.dot(Theta1.T)
-        A2 = sigmoid(Z2)
+        ### START Forward Propagation
+        A1 = np.insert(X[i], 0, 1)
+        Z2 = A1.dot(Theta1.T)      
 
-        # Enen nog toevoegen bij forward
+        A2 = sigmoid(Z2)
+        A2 = np.insert(A2, 0, 1)
+
         Z3 = A2.dot(Theta2.T)
         A3 = sigmoid(Z3) # output
-        
-        z2_prime = sigmoid_gradient(Z2) # grad_2
-        z2_prime = z2_prime.reshape(z2_prime.shape[0], 1)
+        ### END Forward Propagation
 
-        d3 = (A3 - y_vec[i]).T
+        ### START Backward Propagation
+        d3 = (A3 - y_vec[i]).T # (10, 1)
         
         theta_d3 = np.dot(Theta2.T, d3)
         theta_d3 = np.squeeze(np.asarray(theta_d3))
+        
+        Z2 = np.insert(Z2, 0, 1)
+        z2_prime = sigmoid_gradient(Z2) # grad_2
+        z2_prime = z2_prime.reshape(z2_prime.shape[0], 1)
         z2_prime = np.squeeze(np.asarray(z2_prime))
+
         d2 = theta_d3 * z2_prime
         
+        # Reshaping to be able to transpose and fit in delta's
         d2 = d2.reshape(d2.shape[0], 1)
         A1 = A1.reshape(A1.shape[0], 1)
         A2 = A2.reshape(A2.shape[0], 1)
         
+        # Removing first item -> is the added 1 at the start
+        d2 = d2[1:,:]
+
+        # Changing value of the delta's
         Delta2 += np.dot(d2, A1.T)
         Delta3 += np.dot(d3, A2.T)
-
+        ### END Backward Propagation
 
 
     Delta2_grad = Delta2 / m

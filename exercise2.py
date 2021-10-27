@@ -121,7 +121,8 @@ print (f"De kosten die gemoeid zijn met de huidige waarden van Theta1 en Theta2 
 print ("Dit zou zo rond de 7 moeten liggen.")
 acc = np.count_nonzero([pred - y == 0])
 print (f"Correct geclassificeerd: {acc}")
-print (f"De huidige accuratessse van het netwerk is {100 * acc/ m} %")
+old_acc = {100 * acc/ m}
+print (f"De huidige accuratessse van het netwerk is { old_acc } %")
 input ("Druk op Return om verder te gaan.")
 
 # ========================  OPGAVE 3 ======================== 
@@ -160,8 +161,10 @@ pred = np.argmax(predict_number(res_Theta1,res_Theta2,X), axis=1)+1
 pred = pred.reshape(m,1)
 acc = np.count_nonzero([pred - y == 0])
 print (f"correct geclassificeerd: {acc}")
-print (f"De huidige accuratessse van het netwerk is {100 * acc/ m} %")
+print (f"De huidige accuratessse van het netwerk is {100 * acc/ m} %, old: {old_acc} %")
 print ("Dat zou een stuk hoger moeten zijn dan in het begin.")
 print ("Plotten van de waarden van de gewichten in de verborgen laag (hidden layer)")
 
-display_data(res_Theta1[:,1:]) 
+
+if (len(sys.argv)>2 and sys.argv[2]!='skip') :
+    display_data(res_Theta1[:,1:]) 
