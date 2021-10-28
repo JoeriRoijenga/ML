@@ -1,173 +1,91 @@
-import numpy as np
 import matplotlib.pyplot as plt
-from numpy.core.fromnumeric import transpose
-from scipy.sparse import csr_matrix
+import numpy as np
+import tensorflow as tf
+from tensorflow import keras
 
-# ==== OPGAVE 1 ====
-def plot_number(nrVector):
-    # Let op: de manier waarop de data is opgesteld vereist dat je gebruik maakt
-    # van de Fortran index-volgorde – de eerste index verandert het snelst, de 
-    # laatste index het langzaamst; als je dat niet doet, wordt het plaatje 
-    # gespiegeld en geroteerd. Zie de documentatie op 
-    # https://docs.scipy.org/doc/numpy/reference/generated/numpy.reshape.html
+# OPGAVE 1a
+def plot_image(img, label):
+    # Deze methode krijgt een matrix mee (in img) en een label dat correspondeert met het 
+    # plaatje dat in de matrix is weergegeven. Zorg ervoor dat dit grafisch wordt weergegeven.
+    # Maak gebruik van plt.cm.binary voor de cmap-parameter van plt.imgshow.
 
-    plt.matshow(np.reshape(nrVector.T, (20, 20), order='F'));
-    plt.show()
+    # YOUR CODE HERE
 
-# ==== OPGAVE 2a ====
-def sigmoid(z):
-    # Maak de code die de sigmoid van de input z teruggeeft. Zorg er hierbij
-    # voor dat de code zowel werkt wanneer z een getal is als wanneer z een
-    # vector is.
-    # Maak gebruik van de methode exp() in NumPy.
-
-    return (1 / (1 + np.exp(-z)))
+    pass
 
 
-# ==== OPGAVE 2b ====
-def get_y_matrix(y, m):
-    # Gegeven een vector met waarden y_i van 1...x, retourneer een (ijle) matrix
-    # van m×x met een 1 op positie y_i en een 0 op de overige posities.
-    # Let op: de gegeven vector y is 1-based en de gevraagde matrix is 0-based,
-    # dus als y_i=1, dan moet regel i in de matrix [1,0,0, ... 0] zijn, als
-    # y_i=10, dan is regel i in de matrix [0,0,...1] (in dit geval is de breedte
-    # van de matrix 10 (0-9), maar de methode moet werken voor elke waarde van 
-    # y en m
+# OPGAVE 1b
+def scale_data(X):
+    # Deze methode krijgt een matrix mee waarin getallen zijn opgeslagen van 0..m, en hij 
+    # moet dezelfde matrix retourneren met waarden van 0..1. Deze methode moet werken voor 
+    # alle maximale waarde die in de matrix voorkomt.
+    # Deel alle elementen in de matrix 'element wise' door de grootste waarde in deze matrix.
 
-    cols = np.array(y.reshape(-1)) # Transpose
-    cols = np.where(cols==10, 0, cols)
+    # YOUR CODE HERE
 
-    rows = [i for i in range(m)]
-    data = [1 for _ in range(m)]
-    width = max(cols) + 1
-    y_vec = csr_matrix((data, (rows, cols)), shape=(m, width)).todense()
+    pass
+
+# OPGAVE 1c
+def build_model():
+    # Deze methode maakt het keras-model dat we gebruiken voor de classificatie van de mnist
+    # dataset. Je hoeft deze niet abstract te maken, dus je kunt er van uitgaan dat de input
+    # layer van dit netwerk alleen geschikt is voor de plaatjes in de opgave (wat is de 
+    # dimensionaliteit hiervan?).
+    # Maak een model met een input-laag, een volledig verbonden verborgen laag en een softmax
+    # output-laag. Compileer het netwerk vervolgens met de gegevens die in opgave gegeven zijn
+    # en retourneer het resultaat.
+
+    # Het staat je natuurlijk vrij om met andere settings en architecturen te experimenteren.
+
+    model = None
+
+    # YOUR CODE HERE
+
+    return model
+
+
+# OPGAVE 2a
+def conf_matrix(labels, pred):
+    # Retourneer de econfusion matrix op basis van de gegeven voorspelling (pred) en de actuele
+    # waarden (labels). Check de documentatie van tf.math.confusion_matrix:
+    # https://www.tensorflow.org/api_docs/python/tf/math/confusion_matrix
     
-    return y_vec
-
-# ==== OPGAVE 2c ==== 
-# ===== deel 1: =====
-def predict_number(Theta1, Theta2, X):
-    # Deze methode moet een matrix teruggeven met de output van het netwerk
-    # gegeven de waarden van Theta1 en Theta2. Elke regel in deze matrix 
-    # is de waarschijnlijkheid dat het sample op die positie (i) het getal
-    # is dat met de kolom correspondeert.
-
-    # De matrices Theta1 en Theta2 corresponderen met het gewicht tussen de
-    # input-laag en de verborgen laag, en tussen de verborgen laag en de
-    # output-laag, respectievelijk. 
-
-    # Een mogelijk stappenplan kan zijn:
-
-    #    1. voeg enen toe aan de gegeven matrix X; dit is de input-matrix a1
-    #    2. roep de sigmoid-functie van hierboven aan met a1 als actuele
-    #       parameter: dit is de variabele a2
-    #    3. voeg enen toe aan de matrix a2, dit is de input voor de laatste
-    #       laag in het netwerk
-    #    4. roep de sigmoid-functie aan op deze a2; dit is het uiteindelijke
-    #       resultaat: de output van het netwerk aan de buitenste laag.
-
-    # Voeg enen toe aan het begin van elke stap en reshape de uiteindelijke
-    # vector zodat deze dezelfde dimensionaliteit heeft als y in de exercise.
-
-    m = X.shape[0]
-
-    # 1. voeg enen toe aan de gegeven matrix X; dit is de input-matrix a1
-    ones = np.ones((m, 1))
-    A1 = np.hstack((ones, X))
-
-    # 2. roep de sigmoid-functie van hierboven aan met a1 als actuele parameter: dit is de variabele a2
-    A2 = sigmoid(A1.dot(Theta1.T))
-
-    # 3. voeg enen toe aan de matrix a2, dit is de input voor de laatste laag in het netwerk
-    A2 = np.hstack((ones, A2))
-
-    # 4. roep de sigmoid-functie aan op deze a2; dit is het uiteindelijke resultaat: de output van het netwerk aan de buitenste laag.
-    output = sigmoid(A2.dot(Theta2.T))
+    # YOUR CODE HERE
+    pass
     
-    return output
 
-# ===== deel 2: =====
-def compute_cost(Theta1, Theta2, X, y):
-    # Deze methode maakt gebruik van de methode predictNumber() die je hierboven hebt
-    # geïmplementeerd. Hier wordt het voorspelde getal vergeleken met de werkelijk 
-    # waarde (die in de parameter y is meegegeven) en wordt de totale kost van deze
-    # voorspelling (dus met de huidige waarden van Theta1 en Theta2) berekend en
-    # geretourneerd.
-    # Let op: de y die hier binnenkomt is de m×1-vector met waarden van 1...10. 
-    # Maak gebruik van de methode get_y_matrix() die je in opgave 2a hebt gemaakt
-    # om deze om te zetten naar een matrix. 
+# OPGAVE 2b
+def conf_els(conf, labels): 
+    # Deze methode krijgt een confusion matrix mee (conf) en een set van labels. Als het goed is, is 
+    # de dimensionaliteit van de matrix gelijk aan len(labels) × len(labels) (waarom?). Bereken de 
+    # waarden van de TP, FP, FN en TN conform de berekening in de opgave. Maak vervolgens gebruik van
+    # de methodes zip() en list() om een list van len(labels) te retourneren, waarbij elke tupel 
+    # als volgt is gedefinieerd:
+
+    #     (categorie:string, tp:int, fp:int, fn:int, tn:int)
+ 
+    # Check de documentatie van numpy diagonal om de eerste waarde te bepalen.
+    # https://numpy.org/doc/stable/reference/generated/numpy.diagonal.html
+ 
+    # YOUR CODE HERE
+    pass
+
+# OPGAVE 2c
+def conf_data(metrics):
+    # Deze methode krijgt de lijst mee die je in de vorige opgave hebt gemaakt (dus met lengte len(labels))
+    # Maak gebruik van een list-comprehension om de totale tp, fp, fn, en tn te berekenen en 
+    # bepaal vervolgens de metrieken die in de opgave genoemd zijn. Retourneer deze waarden in de
+    # vorm van een dictionary (de scaffold hiervan is gegeven).
+
+    # VERVANG ONDERSTAANDE REGELS MET JE EIGEN CODE
     
-    m = X.shape[0]
-    
-    y_vec = get_y_matrix(y, m)
-    A3 = predict_number(Theta1, Theta2, X)
+    tp = 1
+    fp = 1
+    fn = 1
+    tn = 1
 
-    cost = (1 / m) * sum(np.dot(-y_vec.T, np.log(A3)) - np.dot((1 - y_vec.T), np.log(1 - A3)))
+    # BEREKEN HIERONDER DE JUISTE METRIEKEN EN RETOURNEER DIE 
+    # ALS EEN DICTIONARY
 
-    return np.average(cost)
-
-
-# ==== OPGAVE 3a ====
-def sigmoid_gradient(z): 
-    # Retourneer hier de waarde van de afgeleide van de sigmoïdefunctie.
-    # Zie de opgave voor de exacte formule. Zorg ervoor dat deze werkt met
-    # scalaire waarden en met vectoren.
-
-    g = sigmoid(z)
-    return g * (1 - g)
-
-# ==== OPGAVE 3b ====
-def nn_check_gradients(Theta1, Theta2, X, y): 
-    # Retourneer de gradiënten van Theta1 en Theta2, gegeven de waarden van X en van y
-    # Zie het stappenplan in de opgaven voor een mogelijke uitwerking.
-
-    Delta2 = np.zeros(Theta1.shape)
-    Delta3 = np.zeros(Theta2.shape)
-    # m = 1 #voorbeeldwaarde; dit moet je natuurlijk aanpassen naar de echte waarde van m
-    m = y.shape[0]
-
-    y_vec = get_y_matrix(y, m)
-
-    for i in range(m):
-        ### START Forward Propagation
-        A1 = np.insert(X[i], 0, 1)
-        Z2 = A1.dot(Theta1.T)      
-
-        A2 = sigmoid(Z2)
-        A2 = np.insert(A2, 0, 1)
-
-        Z3 = A2.dot(Theta2.T)
-        A3 = sigmoid(Z3) # output
-        ### END Forward Propagation
-
-        ### START Backward Propagation
-        d3 = (A3 - y_vec[i]).T # (10, 1)
-        
-        theta_d3 = np.dot(Theta2.T, d3)
-        theta_d3 = np.squeeze(np.asarray(theta_d3))
-        
-        Z2 = np.insert(Z2, 0, 1)
-        z2_prime = sigmoid_gradient(Z2) # grad_2
-        z2_prime = z2_prime.reshape(z2_prime.shape[0], 1)
-        z2_prime = np.squeeze(np.asarray(z2_prime))
-
-        d2 = theta_d3 * z2_prime
-        
-        # Reshaping to be able to transpose and fit in delta's
-        d2 = d2.reshape(d2.shape[0], 1)
-        A1 = A1.reshape(A1.shape[0], 1)
-        A2 = A2.reshape(A2.shape[0], 1)
-        
-        # Removing first item -> is the added 1 at the start
-        d2 = d2[1:,:]
-
-        # Changing value of the delta's
-        Delta2 += np.dot(d2, A1.T)
-        Delta3 += np.dot(d3, A2.T)
-        ### END Backward Propagation
-
-
-    Delta2_grad = Delta2 / m
-    Delta3_grad = Delta3 / m
-    
-    return Delta2_grad, Delta3_grad
+    rv = {'tpr':0, 'ppv':0, 'tnr':0, 'fpr':0 }
+    return rv
