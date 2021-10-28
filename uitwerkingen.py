@@ -2,6 +2,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import tensorflow as tf
 from tensorflow import keras
+from keras import models
+from keras import layers
 
 # OPGAVE 1a
 def plot_image(img, label):
@@ -38,9 +40,16 @@ def build_model():
 
     # Het staat je natuurlijk vrij om met andere settings en architecturen te experimenteren.
 
-    model = None
+    model = models.Sequential()
+    model.add(layers.Dense(784))
+    model.add(layers.Dense(128, activation="relu"))
+    model.add(layers.Dense(10, activation="softmax"))
 
-    # YOUR CODE HERE
+    model.compile(
+        optimizer="adam",
+        loss="sparse_categorical_crossentropy",
+        metrics=["accuracy"]
+    )
 
     return model
 

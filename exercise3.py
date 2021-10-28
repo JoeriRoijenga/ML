@@ -69,8 +69,8 @@ print (scale_data(X))
 print ("Het resultaat zou gelijk moeten zijn aan:")
 print (r)
 
-train_images = scale_data(train_images)
-test_images = scale_data(test_images)
+train_images = scale_data(train_images).reshape(-1, 28*28) # reshape to  match model input dimension
+test_images = scale_data(test_images).reshape(-1, 28*28) # reshape to  match model input dimension
 
 input ("Druk op enter om verder te gaan...")
 
@@ -79,7 +79,7 @@ input ("Druk op enter om verder te gaan...")
 print ("")
 print ("Aanmaken van het model.")
 model = build_model()
-print ("Trainen van het model...") 
+print ("Trainen van het model...")
 model.fit(train_images, train_labels, epochs=6)
 print ("Training afgerond.")
 
