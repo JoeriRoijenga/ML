@@ -34,7 +34,7 @@ def get_y_matrix(y, m):
     # van de matrix 10 (0-9), maar de methode moet werken voor elke waarde van 
     # y en m
 
-    cols = np.array(y.reshape(-1))
+    cols = np.array(y.reshape(-1)) # Transpose
     cols = np.where(cols==10, 0, cols)
 
     rows = [i for i in range(m)]
