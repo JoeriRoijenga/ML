@@ -64,6 +64,7 @@ X = np.array( ([1,2,3,4],[2,2,4,4],[4,3,2,1]) )
 r = X/4
 print ("Aanroepen van de methode scale_data met de matrix:")
 print (X)
+print ("Resultaat van scale_data():")
 print (scale_data(X))
 print ("Het resultaat zou gelijk moeten zijn aan:")
 print (r)

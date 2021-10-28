@@ -22,8 +22,9 @@ def scale_data(X):
     # Deel alle elementen in de matrix 'element wise' door de grootste waarde in deze matrix.
 
     # YOUR CODE HERE
-
-    pass
+    highest_value = np.amax(X)
+    
+    return X/highest_value
 
 # OPGAVE 1c
 def build_model():
