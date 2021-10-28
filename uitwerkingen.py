@@ -10,9 +10,9 @@ def plot_image(img, label):
     # Maak gebruik van plt.cm.binary voor de cmap-parameter van plt.imgshow.
 
     # YOUR CODE HERE
-
-    pass
-
+    plt.imshow(img)
+    plt.xlabel(label)
+    plt.show()
 
 # OPGAVE 1b
 def scale_data(X):
