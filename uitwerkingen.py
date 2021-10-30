@@ -4,6 +4,7 @@ import tensorflow as tf
 from tensorflow import keras
 from keras import models
 from keras import layers
+import tensorflow
 
 # OPGAVE 1a
 def plot_image(img, label):
@@ -56,12 +57,12 @@ def build_model():
 
 # OPGAVE 2a
 def conf_matrix(labels, pred):
-    # Retourneer de econfusion matrix op basis van de gegeven voorspelling (pred) en de actuele
+    # Retourneer de confusion matrix op basis van de gegeven voorspelling (pred) en de actuele
     # waarden (labels). Check de documentatie van tf.math.confusion_matrix:
     # https://www.tensorflow.org/api_docs/python/tf/math/confusion_matrix
     
     # YOUR CODE HERE
-    pass
+    return tf.math.confusion_matrix(labels, pred)
     
 
 # OPGAVE 2b
