@@ -1,3 +1,6 @@
+# https://stackoverflow.com/questions/31324218/scikit-learn-how-to-obtain-true-positive-true-negative-false-positive-and-fal
+# https://stackoverflow.com/questions/40200070/what-does-axis-0-do-in-numpys-sum-function
+
 import matplotlib.pyplot as plt
 import numpy as np
 import tensorflow as tf
@@ -74,12 +77,17 @@ def conf_els(conf, labels):
     # als volgt is gedefinieerd:
 
     #     (categorie:string, tp:int, fp:int, fn:int, tn:int)
- 
+
     # Check de documentatie van numpy diagonal om de eerste waarde te bepalen.
     # https://numpy.org/doc/stable/reference/generated/numpy.diagonal.html
  
     # YOUR CODE HERE
-    pass
+    TP = np.diag(conf) # Diagonale die juist zijn
+    FP = conf.sum(axis=0) - TP # Verticale die fout zijn per rij -> axis=0
+    FN = conf.sum(axis=1) - TP # Horizontale die fout zijn per rij -> axis=1
+    TN = conf.sum() - (FP + FN + TP) # Al de overige velden
+
+    return list(zip(labels, TP, FP, FN, TN))
 
 # OPGAVE 2c
 def conf_data(metrics):
@@ -90,13 +98,17 @@ def conf_data(metrics):
 
     # VERVANG ONDERSTAANDE REGELS MET JE EIGEN CODE
     
-    tp = 1
-    fp = 1
-    fn = 1
-    tn = 1
+    tp = sum([metric[1] for metric in metrics])
+    fp = sum([metric[2] for metric in metrics])
+    fn = sum([metric[3] for metric in metrics])
+    tn = sum([metric[4] for metric in metrics])
 
     # BEREKEN HIERONDER DE JUISTE METRIEKEN EN RETOURNEER DIE 
     # ALS EEN DICTIONARY
+    TPR = tp / (tp + fn)
+    PPV = tp / (tp + fp)
+    TNR = tn / (tn + fp)
+    FPR = fp / (fp + tn)
 
-    rv = {'tpr':0, 'ppv':0, 'tnr':0, 'fpr':0 }
+    rv = {'tpr':TPR, 'ppv':PPV, 'tnr':TNR, 'fpr':FPR }
     return rv

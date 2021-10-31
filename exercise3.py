@@ -32,7 +32,7 @@ from uitwerkingen import *
 def plot_matrix(data):
     plt.figure()
     plt.matshow(data)
-    plt.show()
+    # plt.show()
 
 
 # ==== Laden van de data en zetten van belangrijke variabelen ====
